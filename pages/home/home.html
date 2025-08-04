@@ -1,0 +1,29 @@
+<div class="container-fluid p-2 d-flex flex-column align-items-center justify-content-center" style="min-height: 80vh;">
+    <h2>Bem vindo ao YFM REMAKE</h2>
+    <div class="d-flex gap-3">
+        <button class="btn btn-primary">Novo Jogo</button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#carregarJogo">
+          Carregar
+        </button>
+    </div>
+    <div id="user-list"></div>
+</div>
+
+
+<!-- Modal - Carregar Jogo -->
+<div class="modal fade" id="carregarJogo" tabindex="-1" aria-labelledby="carregarJogoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="carregarJogoLabel">Carregar jogo</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="lista_usuarios" class="d-flex flex-column gap-3"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" style="display: none;" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

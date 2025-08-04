@@ -1,0 +1,119 @@
+<link rel="stylesheet" href="/wp-content/plugins/YugiohFMRemake/pages/Partida/style.css" />
+
+<div class="container-fluid py-2">
+  <div class="game-container p-2 mx-auto">
+    <!-- Tabuleiro do Jogo -->
+    <div id="game-board">
+      <div class="row">
+        <div class="col-5">
+          <!-- Estatísticas do Jogo -->
+          <div class="row mb-1 gx-1">
+            <div class="col-12">
+              <div class="card shadow-sm text-center p-1 mb-1 bg-light">
+                <div class="d-flex justify-content-around align-items-center flex-wrap">
+                  <div class="h5 mb-1">
+                    <i class="bi bi-hourglass-split me-1"></i>
+                    Fase:
+                    <span id="current-phase" class="badge bg-primary">Preparação</span>
+                  </div>
+                  <div class="h5 mb-1">
+                    <i class="bi bi-arrow-repeat me-1"></i>
+                    Turno:
+                    <span id="current-turn" class="badge bg-info">Jogador</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Jogador -->
+            <div class="col-md-6">
+              <div class="card shadow-sm text-center p-1 bg-white">
+                <h5 class="fw-bold text-primary mb-1">
+                  <i class="bi bi-person-fill"></i>
+                  Jogador
+                </h5>
+                <div class="mb-1">
+                  <span class="h6 text-success">Vida:</span>
+                  <span id="player-lp" class="badge bg-success fs-6">8000</span>
+                </div>
+                <div>
+                  <span class="h6 text-muted">Cartas restantes:</span>
+                  <span id="player-deck-count" class="badge bg-secondary">40</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Oponente -->
+            <div class="col-md-6">
+              <div class="card shadow-sm text-center p-1 bg-white">
+                <h5 class="fw-bold text-danger mb-1">
+                  <i class="bi bi-person-fill-slash"></i>
+                  Oponente
+                </h5>
+                <div class="row p-2">
+                  <div class="mb-1 col-md-6 badge text-muted">
+                    <span >Vida:</span>
+                    <span id="opponent-lp" class="fs-6">8000</span>
+                  </div>
+                  <div class="mb-1 col-md-6 badge text-muted">
+                    <span >Mão:</span>
+                    <span id="opponent-hand-count" >5</span>
+                  </div>
+                  <div>
+                    <span class="h6 text-muted">Cartas restantes:</span>
+                    <span id="opponent-deck-count" class="badge bg-secondary">40</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Log de Batalha -->
+          <div class="row mt-2">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h6 class="mb-0">Log de Batalha</h6>
+                </div>
+                <div class="card-body p-2">
+                  <div class="battle-log p-2" id="battle-log"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col-7">
+          <!-- Campo de Batalha -->
+          <div class="row">
+            <div class="col-12">
+              <!-- Área do Oponente -->
+              <div class="opponent-area p-1 mb-1">
+                <h4 class="text-center mb-1">Campo do Oponente</h4>
+                <div class="d-flex justify-content-center gap-2" id="opponent-field"></div>
+              </div>
+
+              <!-- Área do Jogador -->
+              <div class="player-area p-1">
+                <h4 class="text-center mb-1">Seu Campo</h4>
+
+                <!-- Campo de Monstros -->
+                <div class="d-flex justify-content-center gap-2 mb-1" id="player-field"></div>
+
+                <!-- Mão do Jogador -->
+                <div class="mb-3">
+                  <h6 class="text-center mb-2">Sua Mão</h6>
+                  <div class="d-flex justify-content-center gap-1" id="player-hand"></div>
+                </div>
+
+                <!-- Controles do Jogo -->
+                <div id="game-controls" class="text-center"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
