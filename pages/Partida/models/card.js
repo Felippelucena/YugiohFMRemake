@@ -28,7 +28,7 @@ export class CardDatabase {
   async initializeCards() {
     try {
       // Carrega o arquivo JSON com as cartas
-      const response = await fetch('/wp-content/plugins/YugiohFMRemake/db/full_cards_yfm.json');
+      const response = await fetch('/wp-content/plugins/YugiohFMRemake/db/CARDS.json');
       const data = await response.json();
       
       // Filtra apenas cartas de monstros (que possuem GuardianStar1, GuardianStar2 e Attribute preenchidos)
@@ -46,7 +46,7 @@ export class CardDatabase {
         return new Card(
           cardData.CardId,
           cardData.CardName,
-          cardData.Type,
+          cardData.card_type,
           cardData.Attack,
           cardData.Defense,
           cardData.Attribute,

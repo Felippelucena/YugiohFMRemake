@@ -1,5 +1,5 @@
 // turnSystem.js - Sistema de Turnos Refatorado
-import { DrawPhase } from './turns/drawphase.js';
+import { DrawPhase } from './turns/drawPhase.js';
 import { MainPhase } from './turns/mainPhase.js';
 import { BattlePhase } from './turns/battlePhase.js';
 import { EndPhase } from './turns/endPhase.js';
@@ -39,11 +39,6 @@ export class TurnSystem {
 
         // Avançar para próxima fase
         this.currentPhaseIndex++;
-
-        // Ignorar fase de batalha no turno 1
-        if (this.turnCount === 1 && this.phaseOrder[this.currentPhaseIndex] === "battle") {
-            this.currentPhaseIndex++; // Pular fase de batalha
-        }
 
         // Verificar se o índice excedeu o número de fases
         if (this.currentPhaseIndex >= this.phaseOrder.length) {

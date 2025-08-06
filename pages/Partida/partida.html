@@ -1,4 +1,5 @@
-<link rel="stylesheet" href="/wp-content/plugins/YugiohFMRemake/pages/Partida/style.css" />
+<link rel="stylesheet" href="/wp-content/plugins/YugiohFMRemake/pages/partida/style.css" />
+<link rel="stylesheet" href="/wp-content/plugins/YugiohFMRemake/pages/partida/battleanimation.css" />
 
 <div class="container-fluid py-2">
   <div class="game-container p-2 mx-auto">
@@ -52,12 +53,12 @@
                 </h5>
                 <div class="row p-2">
                   <div class="mb-1 col-md-6 badge text-muted">
-                    <span >Vida:</span>
+                    <span>Vida:</span>
                     <span id="opponent-lp" class="fs-6">8000</span>
                   </div>
                   <div class="mb-1 col-md-6 badge text-muted">
-                    <span >Mão:</span>
-                    <span id="opponent-hand-count" >5</span>
+                    <span>Mão:</span>
+                    <span id="opponent-hand-count">5</span>
                   </div>
                   <div>
                     <span class="h6 text-muted">Cartas restantes:</span>
@@ -81,7 +82,8 @@
               </div>
             </div>
           </div>
-
+          <!-- Controles do Jogo -->
+          <div id="game-controls" class="text-center p-4"></div>
         </div>
 
         <div class="col-7">
@@ -89,7 +91,7 @@
           <div class="row">
             <div class="col-12">
               <!-- Área do Oponente -->
-              <div class="opponent-area p-1 mb-1">
+              <div class="opponent-area p-1">
                 <h4 class="text-center mb-1">Campo do Oponente</h4>
                 <div class="d-flex justify-content-center gap-2" id="opponent-field"></div>
               </div>
@@ -106,9 +108,6 @@
                   <h6 class="text-center mb-2">Sua Mão</h6>
                   <div class="d-flex justify-content-center gap-1" id="player-hand"></div>
                 </div>
-
-                <!-- Controles do Jogo -->
-                <div id="game-controls" class="text-center"></div>
               </div>
             </div>
           </div>

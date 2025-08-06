@@ -137,6 +137,10 @@ export class Game {
       slot.innerHTML = "";
       if (this.player.field[index]) {
         const cardDiv = this.createCardElement(this.player.field[index], false);
+        if (this.player.field[index].isFaceDown) {
+          //adicionar title
+          cardDiv.title = `${this.player.field[index].name}: ${this.player.field[index].attack}/${this.player.field[index].defense}`;
+        }
         slot.appendChild(cardDiv);
       }
 
@@ -168,9 +172,76 @@ export class Game {
     });
   }
 
-  createCardElement(card, isInHand, isOpponent = false) {
-    const cardDiv = document.createElement("div");
+  createModal(options) {
+  const {
+    id,
+    title,
+    bodyContent,
+    backdrop = "static",
+    keyboard = false,
+    onShow = null,
+    onHide = null
+  } = options;
 
+  const modal = document.createElement("div");
+  modal.className = "modal fade";
+  modal.id = id;
+  modal.tabIndex = -1;
+  modal.setAttribute("aria-labelledby", `${id}Label`);
+  modal.setAttribute("aria-hidden", "true");
+
+  modal.innerHTML = `
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="${id}Label">${title}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          ${bodyContent}
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+  
+  const bootstrapModal = new bootstrap.Modal(modal, {
+    backdrop,
+    keyboard,
+  });
+
+  // Executar callback personalizado quando o modal é mostrado
+  if (onShow) {
+    modal.addEventListener('shown.bs.modal', () => onShow(modal));
+  }
+
+  // Executar callback personalizado quando o modal é ocultado
+  if (onHide) {
+    modal.addEventListener('hidden.bs.modal', () => {
+      onHide(modal);
+      modal.remove();
+    });
+  } else {
+    // Comportamento padrão: remover modal quando oculto
+    modal.addEventListener('hidden.bs.modal', () => {
+      modal.remove();
+    });
+  }
+
+  return { modal, bootstrapModal };
+}
+
+  createCardElement(card) {
+    const cardDiv = document.createElement("div");
+    cardDiv.className = "card-in-game";
+    cardDiv.dataset.id = card.uniqueIdDeck;
+
+    if (card.isFaceDown) {
+      cardDiv.innerHTML = `
+        <div class="card-back"></div>
+      `;
+    } else {
     const attributeIcons = {
       "Dark": "https://ms.yugipedia.com//d/de/DARK.svg",
       "Light": "https://ms.yugipedia.com//3/39/LIGHT.svg",
@@ -179,28 +250,40 @@ export class Game {
       "Water": "https://ms.yugipedia.com//4/40/WATER.svg",
       "Wind": "https://ms.yugipedia.com//0/01/WIND.svg",
     };
-
-    cardDiv.className = "card-in-game";
-    cardDiv.dataset.id = card.uniqueIdDeck;
+    cardDiv.classList.add("p-1");
     cardDiv.innerHTML = `
-      <div class="fw-bold text-truncate title">
-        <img width="16" height="16" src="${attributeIcons[card.attribute]}" alt="${card.attribute}" title="${card.attribute}" >
-        <span title="${card.name}">${card.name}</span>
-      </div>
-      <div class="card-image" style="background-image: url('${card.card_images[0]?.image_url_cropped}');" alt="${card.name}">
-        <div class="info-card">
-          <div>${card.monsterType}</div>
-        </div>      
-      </div>
-      <div class="stats-card">
-      <div class="text-danger text-center">ATK</br><span style="font-size:15px; width:48%">${card.attack}</span></div>
-      <div>|</div>
-      <div class="text-primary text-center">DEF</br><span style="font-size:15px; width:48%">${card.defense}</span></div>
-      </div>
-
+        <div class="fw-bold text-truncate title">
+          <img width="16" height="16" src="${attributeIcons[card.attribute]}" alt="${card.attribute}" title="${card.attribute}" >
+          <span title="${card.name}">${card.name}</span>
+        </div>
+        <div class="card-image" style="background-image: url('${card.card_images[0]?.image_url_cropped}');" alt="${card.name}">
+          <div class="info-card">
+            <div>${card.monsterType}</div>
+          </div>
+        </div>
+        <div class="stats-card">
+        <div class="text-danger text-center">ATK</br><span style="font-size:15px; width:48%">${card.attack}</span></div>
+        <div>|</div>
+        <div class="text-primary text-center">DEF</br><span style="font-size:15px; width:48%">${card.defense}</span></div>
+        </div>
     `;
+    }
 
-    this.turnSystem.currentPhase.drawCardElement(cardDiv, card, isInHand, isOpponent);
+    if (card.isDefPosition) {
+      cardDiv.classList.add("def-position");
+    }
+
+    if (card.type == "Fusion Monster") {
+      cardDiv.classList.add("fusion-monster");
+    } else if (card.type == "Effect Monster") {
+      cardDiv.classList.add("effect-monster");
+    } else if (card.type == "Ritual Monster") {
+      cardDiv.classList.add("ritual-monster");
+    }
+
+
+
+    this.turnSystem.currentPhase.drawCardElement(cardDiv, card);
 
     return cardDiv;
   }

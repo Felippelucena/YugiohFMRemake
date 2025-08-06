@@ -21,10 +21,12 @@ export class Player {
         return null;
     }
     
-    summonMonster(card, slotIndex) {
+    summonMonster(card, slotIndex, isFaceDown = false, isDefPosition = false) {
         if (slotIndex >= 0 && slotIndex < 5) {
             this.field[slotIndex] = card;
             card.position = 'field';
+            card.isFaceDown = isFaceDown;
+            card.isDefPosition = isDefPosition;
             const handIndex = this.hand.indexOf(card);
             if (handIndex > -1) {
                 this.hand.splice(handIndex, 1);

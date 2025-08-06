@@ -1,0 +1,282 @@
+/* Estilos para animação de batalha */
+.battle-card-attacker {
+  animation: slideInLeft 0.5s ease-out;
+}
+
+.battle-card-defender {
+  animation: slideInRight 0.5s ease-out;
+}
+
+.battle-vs {
+  animation: fadeIn 0.3s ease-in;
+  margin: 0 20px;
+}
+
+.battle-result {
+  font-size: 36px;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.5);
+  transition: all 0.3s ease-out;
+  z-index: 10001;
+  pointer-events: none;
+}
+
+.battle-result.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.damage-text {
+  color: #ff4444;
+  font-size: 44px;
+  text-shadow: 0px 0px 40px rgba(0, 0, 0, 0.6);
+}
+
+.lp-damage-text {
+  color: #fa5656;
+  font-size: 44px;
+  text-shadow: 0px 0px 40px rgba(0, 0, 0, 0.6);
+}
+
+.tie-text {
+  color: #ffaa00;
+  text-shadow: 2px 2px 4px rgba(255, 170, 0, 0.5);
+}
+
+.card-destroyed {
+  animation: cardDestroy 0.8s ease-in-out forwards;
+}
+
+.card-damaged {
+  animation: cardDamage 0.5s ease-in-out;
+}
+
+/* Animações */
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes cardDestroy {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(0.5);
+    opacity: 0;
+    filter: brightness(0.5);
+  }
+}
+
+@keyframes cardDamage {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+/* Estilos para animação de fusão */
+.fusion-title {
+  animation: fusionTitlePulse 0.8s ease-out;
+  text-shadow: 0 0 20px #ff6b35, 0 0 40px #ff6b35;
+  margin-bottom: 20px;
+}
+
+.fusion-card-left {
+  animation: slideInFromLeft 0.6s ease-out;
+  margin: 0 15px;
+}
+
+.fusion-card-right {
+  animation: slideInFromRight 0.6s ease-out;
+  margin: 0 15px;
+}
+
+.fusion-plus, .fusion-equals {
+  animation: fadeInScale 0.4s ease-out;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  margin: 0 20px;
+  color: #ffd700;
+}
+
+.fusion-result-success {
+  animation: fusionSuccessAppear 0.8s ease-out;
+  margin: 0 15px;
+  box-shadow: 0 0 30px #00ff00, 0 0 60px #00ff00;
+  border-radius: 10px;
+}
+
+.fusion-fail-placeholder {
+  width: 120px;
+  height: 180px;
+  background: linear-gradient(45deg, #ff4444, #cc0000);
+  border: 3px solid #fff;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fusionFailAppear 0.8s ease-out;
+  margin: 0 15px;
+  box-shadow: 0 0 30px #ff4444;
+}
+
+.fusion-fail-content {
+  text-align: center;
+  color: white;
+}
+
+.fusion-fail-icon {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.fusion-fail-text {
+  font-size: 16px;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.fusion-result {
+  font-size: 28px;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.5);
+  transition: all 0.4s ease-out;
+  z-index: 10001;
+  pointer-events: none;
+}
+
+.fusion-result.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.fusion-success-text {
+  color: #00ff00;
+  text-shadow: 0 0 10px #00ff00, 2px 2px 4px rgba(0, 255, 0, 0.5);
+}
+
+.fusion-fail-text {
+  color: #ff4444;
+  text-shadow: 0 0 10px #ff4444, 2px 2px 4px rgba(255, 68, 68, 0.5);
+}
+
+/* Animações de fusão */
+@keyframes fusionTitlePulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-150px) rotateY(-45deg);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0) rotateY(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(150px) rotateY(45deg);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0) rotateY(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fusionSuccessAppear {
+  0% {
+    transform: scale(0.5) rotateY(180deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1) rotateY(90deg);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1) rotateY(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes fusionFailAppear {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

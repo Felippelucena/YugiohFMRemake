@@ -48,7 +48,7 @@ export class TurnTemplate {
     // Desenhar o campo do jogador
   }
 
-  drawCardElement(cardDiv, card, isInHand = false, isOpponent = false) {
+  drawCardElement(cardDiv, card) {
     // Desenhar o elemento da carta
   }
 

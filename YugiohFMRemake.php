@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: Difrati Tools
-Description: Diversas ferramentas.
-Version: 2.33
+Plugin Name: Yu-Gi-Oh FM Remake
+Description: A remake of the classic Yu-Gi-Oh Forbidden Memories game with modern web technologies.
+Version: 0.1
 Author: Felippe Lucena
 */
 
@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('DIFRATI_PLUGIN_FILE', __FILE__);
+define('YUGIOH_PLUGIN_FILE', __FILE__);
 wp_enqueue_script('jquery');
 
 function main_shortcode()

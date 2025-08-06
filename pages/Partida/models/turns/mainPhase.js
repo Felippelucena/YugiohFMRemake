@@ -12,7 +12,6 @@ export class MainPhase extends TurnTemplate {
   }
 
   onEnter() {
-    // Se for turno da IA, executar automaticamente
     if (this.game.turnSystem.currentPlayer === this.game.opponent) {
       setTimeout(() => {
         this.game.opponent.makeMove(this.game);
@@ -51,6 +50,7 @@ export class MainPhase extends TurnTemplate {
       if (this.fusionCards.length > 0) {
         this.addToFusion(card);
       } else {
+
         this.selectCard(card);
       }
     };
@@ -100,7 +100,7 @@ export class MainPhase extends TurnTemplate {
     }
   }
 
-  drawCardElement(cardDiv, card, isInHand, isOpponent = false) {
+  drawCardElement(cardDiv, card) {
     if (this.selectedCard === card) {
       cardDiv.classList.add("selected");
     }
@@ -116,29 +116,88 @@ export class MainPhase extends TurnTemplate {
     }
   }
 
-  summonSelected() {
+selectFaceModal() {
+  if (!this.selectedCard) return;
+
+  let isFaceDown = false;
+
+  const dinamicContent = (modal) => {
+    if (!this.selectedCard) return;
+    // Fazer clone da carta selecionada
+    const cardClone = this.selectedCard.clone();
+    cardClone.isFaceDown = isFaceDown;
+    const cardDiv = this.game.createCardElement(cardClone);
+
+    // Atualizar apenas o conteúdo da carta, não o modal inteiro
+    const cardContainer = modal.querySelector(".card-container");
+    if (cardContainer) {
+      cardContainer.innerHTML = cardDiv.outerHTML;
+    }
+  };
+
+  const bodyContent = `
+    <div class="d-flex justify-content-around align-items-center">
+      <button class="btn btn-primary turn"><</button>
+      <div class="card-container">
+      </div>
+      <button class="btn btn-secondary turn">></button>
+    </div>
+    <button class="btn btn-secondary" id="confirmPosition">Confirmar</button>
+  `;
+
+  const { modal, bootstrapModal } = this.game.createModal({
+    id: "selectFaceModal",
+    title: "Selecione a posição da carta",
+    bodyContent: bodyContent,
+    onShow: (modal) => {
+      dinamicContent(modal);
+
+      const turnButtons = modal.querySelectorAll(".turn");
+      turnButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          isFaceDown = !isFaceDown;
+          dinamicContent(modal);
+        });
+      });
+
+      const confirmButton = modal.querySelector("#confirmPosition");
+      confirmButton.addEventListener("click", () => {
+        this.summonSelected(isFaceDown);
+        bootstrapModal.hide();
+      });
+    }
+  });
+
+  bootstrapModal.show();
+}
+
+  summonSelected(isFaceDown = false, isDefPosition = false) {
     if (!this.selectedCard) return;
 
     if (this.selectedSpaceField !== null) {
-      this.game.turnSystem.currentPlayer.summonMonster(this.selectedCard, this.selectedSpaceField);
+      this.game.turnSystem.currentPlayer.summonMonster(this.selectedCard, this.selectedSpaceField, isFaceDown, isDefPosition);
       this.game.log(`${this.game.turnSystem.currentPlayer.name} invocou ${this.selectedCard.name} (ATK: ${this.selectedCard.attack})`);
       this.selectedCard = null;
       this.game.turnSystem.nextPhase();
     } else {
       const emptySlot = this.game.turnSystem.currentPlayer.getEmptyFieldSlot();
       if (emptySlot !== -1) {
-        this.game.turnSystem.currentPlayer.summonMonster(this.selectedCard, emptySlot);
+        this.game.turnSystem.currentPlayer.summonMonster(this.selectedCard, emptySlot, isFaceDown, isDefPosition);
         this.game.log(`${this.game.turnSystem.currentPlayer.name} invocou ${this.selectedCard.name} (ATK: ${this.selectedCard.attack})`);
         this.selectedCard = null;
         this.game.turnSystem.nextPhase();
       } else {
-        alert("Não há espaços vazios no campo, selecione uma carta do campo para fundir ou substituir!");
+        showToast("Não há espaços vazios no campo", "Selecione uma carta do campo para fundir ou substituir!");
       }
     }
   }
 
   selectCard(card) {
     if (this.game.turnSystem.currentPlayer !== this.game.player) return;
+    if (this.selectedCard === card) {
+      this.selectFaceModal();
+      return;
+    }
     this.selectedCard = card;
     this.updateUI();
   }
@@ -165,7 +224,7 @@ export class MainPhase extends TurnTemplate {
 
   async attemptFusion() {
     if (this.fusionCards.length < 1) {
-      alert("Selecione pelo menos 1 carta para fusão!");
+      showToast("Selecione pelo menos 1 carta para fusão!", "Você precisa selecionar pelo menos uma carta para tentar fundir!", "warning");
       return;
     }
 
@@ -218,46 +277,83 @@ export class MainPhase extends TurnTemplate {
       this.selectedCard = finalCard;
       this.summonSelected();
     } else {
-      alert("Nenhuma fusão foi possível!");
+      showToast("Nenhuma fusão foi possível!", "Tente selecionar outras cartas ou verificar se há cartas no campo!", "warning");
       this.fusionCards = [];
     }
   }
 
-  async runanimationFusion(fusionResult, card1, card2) {
-    return new Promise((resolve) => {
-            // cria uma div que ocupa toda a tela
-      const bgAnimation = document.createElement("div");
-      bgAnimation.className = "bg-animation";
-      document.body.appendChild(bgAnimation);
-      // Criar o modal
-      const modal = document.createElement("div");
-      modal.className = "animate-modal";
+async runanimationFusion(fusionResult, card1, card2) {
+  return new Promise((resolve) => {
+    // cria uma div que ocupa toda a tela
+    const bgAnimation = document.createElement("div");
+    bgAnimation.className = "bg-game-modal";
+    document.body.appendChild(bgAnimation);
+    
+    // Criar o modal
+    const modal = document.createElement("div");
+    modal.className = "game-modal d-flex justify-content-center align-items-center p-4";
 
-      // Adicionar conteúdo ao modal com pausa
-      modal.innerHTML += `
-      <h2>🔥 Fusão em Progresso! 🔥</h2>
-    `;
-      setTimeout(() => {
-        modal.innerHTML += `
-      <p>${card1.name} + ${card2.name}</p>
-    `;
-      }, 600);
-      setTimeout(() => {
-        modal.innerHTML += `
-      <p>Resultado: <strong>${fusionResult ? fusionResult.name : "Fusão Falhou"}</strong></p>
-    `;
-      }, 2000);
-      // Adicionar o modal ao corpo
-      document.body.appendChild(modal);
+    let card1Element, card2Element, resultElement;
 
-      // Remover o modal após 3 segundos e resolver a Promise
-      setTimeout(() => {
-        modal.remove();
-        bgAnimation.remove();
-        resolve(); // Resolve a Promise após o tempo definido
-      }, 3300);
-    });
-  }
+    // Primeira carta
+    setTimeout(() => {
+      card1Element = this.game.createCardElement(card1.clone());
+      card1Element.classList.add('fusion-card-left');
+      modal.appendChild(card1Element);
+    }, 800);
+
+    // Símbolo de mais
+    setTimeout(() => {
+      const plusElement = document.createElement("div");
+      plusElement.className = "text-center text-white font-weight-bold fs-1 fusion-plus";
+      plusElement.innerHTML = `+`;
+      modal.appendChild(plusElement);
+    }, 1200);
+
+    // Segunda carta
+    setTimeout(() => {
+      card2Element = this.game.createCardElement(card2.clone());
+      card2Element.classList.add('fusion-card-right');
+      modal.appendChild(card2Element);
+    }, 1600);
+
+    // Símbolo de igual
+    setTimeout(() => {
+      const equalsElement = document.createElement("div");
+      equalsElement.className = "text-center text-white font-weight-bold fs-1 fusion-equals";
+      equalsElement.innerHTML = `=`;
+      modal.appendChild(equalsElement);
+    }, 2000);
+
+    // Resultado da fusão
+    setTimeout(() => {
+      if (fusionResult) {
+        resultElement = this.game.createCardElement(fusionResult.clone());
+        resultElement.classList.add('fusion-result-success');
+        modal.appendChild(resultElement);
+      } else {
+        // Criar elemento para mostrar falha
+        const failElement = document.createElement("div");
+        failElement.className = "fusion-fail-placeholder";
+        failElement.innerHTML = `
+          <div class="fusion-fail-content">
+            <div class="fusion-fail-icon">❌</div>
+            <div class="fusion-fail-text">FALHA</div>
+          </div>
+        `;
+        modal.appendChild(failElement);
+      }
+    }, 2400);
+
+    document.body.appendChild(modal);
+    setTimeout(() => {
+      modal.remove();
+      bgAnimation.remove();
+      resolve();
+    }, 4500);
+  });
+}
+
 
   invocarFundir() {
     if (this.fusionCards.length > 0) {
@@ -268,15 +364,10 @@ export class MainPhase extends TurnTemplate {
         this.fusionCards = [this.selectedCard];
         this.attemptFusion();
       } else {
-        // Espaço vazio, invocar normalmente
-        this.summonSelected();
+        this.selectFaceModal();
       }
-
-      // Limpar seleção e fusões
-      this.selectedCard = null;
-      this.fusionCards = [];
     } else {
-      this.game.showToast("Selecione uma carta", "Você precisa selecionar uma carta para invocar ou fundir!", "warning");
+      showToast("Selecione uma carta", "Você precisa selecionar uma carta para invocar ou fundir!", "warning");
     }
   }
 
