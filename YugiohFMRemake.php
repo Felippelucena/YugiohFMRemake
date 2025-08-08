@@ -2,12 +2,19 @@
 /*
 Plugin Name: Yu-Gi-Oh FM Remake
 Description: A remake of the classic Yu-Gi-Oh Forbidden Memories game with modern web technologies.
-Version: 0.1
+Version: 0.11
 Author: Felippe Lucena
 */
 
 if (!defined('ABSPATH')) {
     exit;
+}
+
+register_activation_hook(__FILE__, 'fm_plugin_activate');
+
+function fm_plugin_activate() {
+    //require_once plugin_dir_path(__FILE__) . 'includes/install.php';
+    //fm_plugin_install_tables();
 }
 
 define('YUGIOH_PLUGIN_FILE', __FILE__);

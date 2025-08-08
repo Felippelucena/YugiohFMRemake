@@ -241,22 +241,18 @@ export class Game {
       cardDiv.innerHTML = `
         <div class="card-back"></div>
       `;
+
+      cardDiv.style.border = "3px solid #967244";
     } else {
-    const attributeIcons = {
-      "Dark": "https://ms.yugipedia.com//d/de/DARK.svg",
-      "Light": "https://ms.yugipedia.com//3/39/LIGHT.svg",
-      "Earth": "https://ms.yugipedia.com//a/a1/EARTH.svg",
-      "Fire": "https://ms.yugipedia.com//d/d6/FIRE.svg",
-      "Water": "https://ms.yugipedia.com//4/40/WATER.svg",
-      "Wind": "https://ms.yugipedia.com//0/01/WIND.svg",
-    };
+
     cardDiv.classList.add("p-1");
+
     cardDiv.innerHTML = `
         <div class="fw-bold text-truncate title">
-          <img width="16" height="16" src="${attributeIcons[card.attribute]}" alt="${card.attribute}" title="${card.attribute}" >
+          <img width="16" height="16" src="wp-content/plugins/YugiohFMRemake/static/attributes_images/${card.attribute.toUpperCase()}.svg" alt="${card.attribute}" title="${card.attribute}" >
           <span title="${card.name}">${card.name}</span>
         </div>
-        <div class="card-image" style="background-image: url('${card.card_images[0]?.image_url_cropped}');" alt="${card.name}">
+        <div class="card-image" style="background-image: url('wp-content/plugins/YugiohFMRemake/static/card_images/${card.type}/${card.id}.webp');" alt="${card.name}">
           <div class="info-card">
             <div>${card.monsterType}</div>
           </div>

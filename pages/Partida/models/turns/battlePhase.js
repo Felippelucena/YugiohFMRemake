@@ -165,7 +165,6 @@ export class BattlePhase extends TurnTemplate {
 
 async runanimationBattle(attacker, defender = null) {
   return new Promise((resolve) => {
-    // cria uma div que ocupa toda a tela
     const bgAnimation = document.createElement("div");
     bgAnimation.className = "bg-game-modal";
     document.body.appendChild(bgAnimation);
